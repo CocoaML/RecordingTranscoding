@@ -24,6 +24,12 @@
     long long totalSeconds;
     BOOL isWantOut;
     
+// ml 增加开始
+    UIButton *playVoiceButton;
+    UIButton *deleteVoiceButton;
+    NSTimer  *_playerTimer;
+    AVAudioPlayer *_tempPlayer;
+// ml 增加结束
 }
 
 @end
@@ -60,6 +66,29 @@
     [recordButton addTarget:self action:@selector(recordButtonClick) forControlEvents:UIControlEventTouchUpInside];
     [recordViewBG addSubview:recordButton];
     
+    // ml 增加开始
+    /* 删除录音按钮 */
+    deleteVoiceButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [deleteVoiceButton setFrame:CGRectMake(0, 0, 44, 44)];
+    deleteVoiceButton.center = CGPointMake(CGRectGetMinX(recordButton.frame)/2, CGRectGetHeight(recordViewBG.frame)/2);
+    [deleteVoiceButton setImage:[UIImage imageNamed:@"delete_audio.png"] forState:UIControlStateNormal];
+    [deleteVoiceButton addTarget:self action:@selector(deleteVoiceButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    [recordViewBG addSubview:deleteVoiceButton];
+    
+    /* 播放录音按钮 */
+    playVoiceButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [playVoiceButton setFrame:CGRectMake(0, 0, 44, 44)];
+    playVoiceButton.center = CGPointMake(V_S_W - (V_S_W - CGRectGetMaxX(recordButton.frame))/2, CGRectGetHeight(recordViewBG.frame)/2);
+    [playVoiceButton addTarget:self action:@selector(playVoiceButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    [recordViewBG addSubview:playVoiceButton];
+    // ml 增加结束
+
+    UIImageView *animationView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 12, 20, 20)];
+    animationView.image =[UIImage imageNamed:@"audio_Green_4"];
+    animationView.animationImages = [NSArray arrayWithObjects:[UIImage imageNamed:@"audio_Green_2"],[UIImage imageNamed:@"audio_Green_3"],[UIImage imageNamed:@"audio_Green_5"],[UIImage imageNamed:@"audio_Green_1"], nil];
+    animationView.animationDuration = 2.0;
+    animationView.tag = 101;
+    [playVoiceButton addSubview:animationView];
     
     timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 24, 40, 20)];
     [timeLabel setBackgroundColor:[UIColor clearColor]];
@@ -85,6 +114,99 @@
     [self beginToRecordAudio];
 }
 
+// ml 增加开始
+//删除整个语音
+- (void)deleteVoiceButtonClick {
+    if ([self.delegate respondsToSelector:@selector(deleteVoice)]) {
+        [self.delegate deleteVoice];
+    }
+    
+    [self stopPlay];
+    
+    timeLabel.text = @"00:00";
+    totalSeconds = 0;
+    // 音频删除时，按钮隐藏
+    playVoiceButton.hidden = YES;
+    deleteVoiceButton.hidden = YES;
+    if (_tempPlayer.isPlaying) {
+        [_tempPlayer stop];
+    }
+    
+    //也要将本地这条语音删除
+    [self deleteVedio];
+}
+
+//删除音频
+-(void)deleteVedio
+{
+    NSString *pathString=[BlazeicePublicMethod getPathByFileName:lastVedio ofType:@"wav"];
+    NSString *vedioAmr=[BlazeicePublicMethod getPathByFileName:[lastVedio stringByAppendingString:@"wavToAmr"] ofType:@"amr"];
+    [BlazeicePublicMethod deleteFileAtPath:pathString];
+    [BlazeicePublicMethod deleteFileAtPath:vedioAmr];
+    lastVedio=nil;
+}
+
+- (void)playVoiceButtonClick {
+    if ([self.delegate respondsToSelector:@selector(playVoice)]) {
+        [self.delegate playVoice];
+    }
+  
+    if (_tempPlayer.isPlaying) {
+        [_tempPlayer stop];
+        
+        UIImageView *animationView = (UIImageView*)[playVoiceButton viewWithTag:101];
+        [animationView stopAnimating];
+        
+        if (_playerTimer) {
+            [_playerTimer invalidate];
+            _playerTimer=nil;
+        }
+        return;
+    }
+    
+    if (lastVedio!=nil) {
+
+        UIImageView *animationView = (UIImageView*)[playVoiceButton viewWithTag:101];
+        [animationView startAnimating];
+        
+        if (_playerTimer) {
+            [_playerTimer invalidate];
+            _playerTimer=nil;
+        }
+        
+        NSURL *tempUrl = [NSURL URLWithString:[[BlazeicePublicMethod getPathByFileName:lastVedio ofType:@"wav"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+        _tempPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:tempUrl error:nil];
+        
+        [_tempPlayer play];
+        NSTimeInterval vedioTime = _tempPlayer.duration+0.1;
+        
+        //播放完成时 停止
+        _playerTimer=[NSTimer scheduledTimerWithTimeInterval:vedioTime target:self selector:@selector(stopPlay) userInfo:nil repeats:NO];
+        [animationView startAnimating];
+        UInt32 overried=kAudioSessionOverrideAudioRoute_Speaker;
+        if ([[UIDevice currentDevice] proximityState]==YES) {
+            overried=kAudioSessionOverrideAudioRoute_None;
+            [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+        }else{
+            [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+        }
+        AudioSessionSetProperty(kAudioSessionProperty_OverrideAudioRoute, sizeof(overried),&overried);
+    }
+}
+//停止播放
+-(void)stopPlay
+{
+    if (_playerTimer) {
+        [_playerTimer invalidate];
+        _playerTimer=nil;
+    }
+    
+    UIImageView *animationView = (UIImageView *)[playVoiceButton viewWithTag:101];
+    [animationView stopAnimating];
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
+}
+// ml 增加结束
+
 - (void)recordButtonClick {
     if (vedioing) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -92,6 +214,10 @@
             [recordButton setImage:[UIImage imageNamed:@"recordAudio_record"] forState:UIControlStateNormal];
             actionButton.userInteractionEnabled = NO;
             [actionButton setTitle:@"正在处理音频" forState:UIControlStateNormal];
+            
+            // 音频处理格式转换时，按钮隐藏
+            playVoiceButton.hidden = YES;
+            deleteVoiceButton.hidden = YES;
         });
         [self performSelector:@selector(endToRecordAudio) withObject:nil afterDelay:0.5];
     }
@@ -112,16 +238,26 @@
 // 用户录制中途取消录音处理
 - (void)cancleRecord {
     if (lastVedio) {
-        NSString *lastAmr=[BlazeicePublicMethod getPathByFileName:[lastVedio stringByAppendingString:@"wavToAmr"] ofType:@"amr"];
+        
+        /*
+         *  修改原因：用户录制中途取消录音，删除本地音频文件，文件路径调整
+         */
+        
+//        NSString *lastAmr=[BlazeicePublicMethod getPathByFileName:[lastVedio stringByAppendingString:@"wavToAmr"] ofType:@"amr"];
+        NSString *lastAmr=lastVedio;
         [self deleteVedioNamed:lastAmr];
-        NSString *lastWav=[BlazeicePublicMethod getPathByFileName:lastVedio ofType:@"wav"];
+        
+//        NSString *lastWav=[BlazeicePublicMethod getPathByFileName:lastVedio ofType:@"wav"];
+        NSString *lastWav=lastVedio;
         [self deleteVedioNamed:lastWav];
         lastVedio = nil;
     }
     if (vedioPath) {
-        NSString *vedioAmr=[BlazeicePublicMethod getPathByFileName:[vedioPath stringByAppendingString:@"wavToAmr"] ofType:@"amr"];
+//        NSString *vedioAmr=[BlazeicePublicMethod getPathByFileName:[vedioPath stringByAppendingString:@"wavToAmr"] ofType:@"amr"];
+        NSString *vedioAmr=vedioPath;
         [self deleteVedioNamed:vedioAmr];
-        NSString *vedioWav=[BlazeicePublicMethod getPathByFileName:vedioPath ofType:@"wav"];
+//        NSString *vedioWav=[BlazeicePublicMethod getPathByFileName:vedioPath ofType:@"wav"];
+        NSString *vedioWav=vedioPath;
         [self deleteVedioNamed:vedioWav];
         lastVedio = nil;
     }
@@ -155,6 +291,10 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         actionButton.userInteractionEnabled = YES;
         [actionButton setTitle:@"完成" forState:UIControlStateNormal];
+
+        // 音频处理完成时，按钮显示
+        playVoiceButton.hidden = NO;
+        deleteVoiceButton.hidden = NO;
     });
 }
 
@@ -167,6 +307,11 @@
 }
 
 - (void)beginToRecordAudio {
+    
+    // 录音开始时，按钮隐藏
+    playVoiceButton.hidden = YES;
+    deleteVoiceButton.hidden = YES;
+    
     vedioing = YES;
     [recordVoiceImageView startAnimating];
     [recordButton setImage:[UIImage imageNamed:@"recordAudio_recording"] forState:UIControlStateNormal];
@@ -242,6 +387,10 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 actionButton.userInteractionEnabled = YES;
                 [actionButton setTitle:@"完成" forState:UIControlStateNormal];
+                
+                // 音频处理完成时，按钮显示
+                playVoiceButton.hidden = NO;
+                deleteVoiceButton.hidden = NO;
             });
         }
     }

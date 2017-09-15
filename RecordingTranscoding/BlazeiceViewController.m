@@ -6,6 +6,18 @@
 //  Copyright (c) 2013年 . All rights reserved.
 //
 
+/* 
+ *  录音模块
+ *
+ *  支持录音时转码amr 支持断点续录
+ *
+ *  音频文件目录： /Documents/blazeiceDownloads/
+ *  有两个格式：wav 、amr
+ *  点击完成按钮，保存录音文件，否则不保存音频文件
+ *
+ *  感谢分享。原地址： https://github.com/Blazeice/RecordingTranscoding
+ */
+
 #import "BlazeiceViewController.h"
 #import "BlazeicePublicMethod.h"
 @interface BlazeiceViewController ()
@@ -85,6 +97,12 @@
     [recordView removeFromSuperview];
     if (![BlazeicePublicMethod stringIsClassNull:vedioPathString]) {
         _lastVedio = [NSString stringWithFormat:@"%@",vedioPathString];
+        
+
+        NSString *voiceWavString = [BlazeicePublicMethod getPathByFileName:_lastVedio ofType:@"wav"];
+        NSString *voiceAmrString=[BlazeicePublicMethod getPathByFileName:[_lastVedio stringByAppendingString:@"wavToAmr"] ofType:@"amr"];
+        NSLog(@"录音文件地址wav： %@, amr格式 %@", voiceWavString, voiceAmrString);
+
         UIButton *addRecordButton = (UIButton*)[_buttomview viewWithTag:1122];
         addRecordButton.hidden = YES;
         
