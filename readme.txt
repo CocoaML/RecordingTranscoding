@@ -13,3 +13,6 @@
  *
  *  感谢分享。原地址： https://github.com/Blazeice/RecordingTranscoding
  */
+
+更新日志：
+2021-06-19：Xcode12 更新

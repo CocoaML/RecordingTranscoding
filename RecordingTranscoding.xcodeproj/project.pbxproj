@@ -46,16 +46,8 @@
 		62D671D71C0C4CBB00450BE9 /* wav.mm in Sources */ = {isa = PBXBuildFile; fileRef = 62D671A91C0C4CBB00450BE9 /* wav.mm */; };
 		62D671D81C0C4CBB00450BE9 /* libopencore-amrnb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 62D671B21C0C4CBB00450BE9 /* libopencore-amrnb.a */; };
 		62D671D91C0C4CBB00450BE9 /* libopencore-amrnb.a.arm64 in Frameworks */ = {isa = PBXBuildFile; fileRef = 62D671B31C0C4CBB00450BE9 /* libopencore-amrnb.a.arm64 */; };
-		62D671DA1C0C4CBB00450BE9 /* libopencore-amrnb.a.armv7 in Frameworks */ = {isa = PBXBuildFile; fileRef = 62D671B41C0C4CBB00450BE9 /* libopencore-amrnb.a.armv7 */; };
-		62D671DB1C0C4CBB00450BE9 /* libopencore-amrnb.a.armv7s in Frameworks */ = {isa = PBXBuildFile; fileRef = 62D671B51C0C4CBB00450BE9 /* libopencore-amrnb.a.armv7s */; };
-		62D671DC1C0C4CBB00450BE9 /* libopencore-amrnb.a.i386 in Frameworks */ = {isa = PBXBuildFile; fileRef = 62D671B61C0C4CBB00450BE9 /* libopencore-amrnb.a.i386 */; };
-		62D671DD1C0C4CBB00450BE9 /* libopencore-amrnb.a.x86_64 in Frameworks */ = {isa = PBXBuildFile; fileRef = 62D671B71C0C4CBB00450BE9 /* libopencore-amrnb.a.x86_64 */; };
 		62D671DE1C0C4CBB00450BE9 /* libopencore-amrwb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 62D671B81C0C4CBB00450BE9 /* libopencore-amrwb.a */; };
 		62D671DF1C0C4CBB00450BE9 /* libopencore-amrwb.a.arm64 in Frameworks */ = {isa = PBXBuildFile; fileRef = 62D671B91C0C4CBB00450BE9 /* libopencore-amrwb.a.arm64 */; };
-		62D671E01C0C4CBB00450BE9 /* libopencore-amrwb.a.armv7 in Frameworks */ = {isa = PBXBuildFile; fileRef = 62D671BA1C0C4CBB00450BE9 /* libopencore-amrwb.a.armv7 */; };
-		62D671E11C0C4CBB00450BE9 /* libopencore-amrwb.a.armv7s in Frameworks */ = {isa = PBXBuildFile; fileRef = 62D671BB1C0C4CBB00450BE9 /* libopencore-amrwb.a.armv7s */; };
-		62D671E21C0C4CBB00450BE9 /* libopencore-amrwb.a.i386 in Frameworks */ = {isa = PBXBuildFile; fileRef = 62D671BC1C0C4CBB00450BE9 /* libopencore-amrwb.a.i386 */; };
-		62D671E31C0C4CBB00450BE9 /* libopencore-amrwb.a.x86_64 in Frameworks */ = {isa = PBXBuildFile; fileRef = 62D671BD1C0C4CBB00450BE9 /* libopencore-amrwb.a.x86_64 */; };
 		62D671E41C0C4CBB00450BE9 /* opencore-amrnb.pc in Resources */ = {isa = PBXBuildFile; fileRef = 62D671BF1C0C4CBB00450BE9 /* opencore-amrnb.pc */; };
 		62D671E51C0C4CBB00450BE9 /* opencore-amrwb.pc in Resources */ = {isa = PBXBuildFile; fileRef = 62D671C01C0C4CBB00450BE9 /* opencore-amrwb.pc */; };
 		62D671E71C0C4CBB00450BE9 /* VoiceConverter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 62D671C41C0C4CBB00450BE9 /* VoiceConverter.mm */; };
@@ -136,24 +128,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				62D671DC1C0C4CBB00450BE9 /* libopencore-amrnb.a.i386 in Frameworks */,
 				62A05D0717C36BC4005D5E5F /* AudioToolbox.framework in Frameworks */,
 				62A05D0517C36BBB005D5E5F /* AVFoundation.framework in Frameworks */,
-				62D671DB1C0C4CBB00450BE9 /* libopencore-amrnb.a.armv7s in Frameworks */,
 				62A05D0317C36BB3005D5E5F /* CoreAudio.framework in Frameworks */,
-				62D671E21C0C4CBB00450BE9 /* libopencore-amrwb.a.i386 in Frameworks */,
-				62D671E01C0C4CBB00450BE9 /* libopencore-amrwb.a.armv7 in Frameworks */,
 				62D671DE1C0C4CBB00450BE9 /* libopencore-amrwb.a in Frameworks */,
 				62D671DF1C0C4CBB00450BE9 /* libopencore-amrwb.a.arm64 in Frameworks */,
 				62A05CE017C36AEB005D5E5F /* UIKit.framework in Frameworks */,
 				62D671D81C0C4CBB00450BE9 /* libopencore-amrnb.a in Frameworks */,
 				62A05CE217C36AEB005D5E5F /* Foundation.framework in Frameworks */,
 				62A05CE417C36AEB005D5E5F /* CoreGraphics.framework in Frameworks */,
-				62D671DD1C0C4CBB00450BE9 /* libopencore-amrnb.a.x86_64 in Frameworks */,
 				62D671D91C0C4CBB00450BE9 /* libopencore-amrnb.a.arm64 in Frameworks */,
-				62D671DA1C0C4CBB00450BE9 /* libopencore-amrnb.a.armv7 in Frameworks */,
-				62D671E31C0C4CBB00450BE9 /* libopencore-amrwb.a.x86_64 in Frameworks */,
-				62D671E11C0C4CBB00450BE9 /* libopencore-amrwb.a.armv7s in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -390,17 +374,13 @@
 				CLASSPREFIX = LZX;
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = lezhixing;
-				TargetAttributes = {
-					62A05CDB17C36AEB005D5E5F = {
-						DevelopmentTeam = VU6SYEBV9S;
-					};
-				};
 			};
 			buildConfigurationList = 62A05CD717C36AEB005D5E5F /* Build configuration list for PBXProject "RecordingTranscoding" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 62A05CD317C36AEB005D5E5F;
@@ -541,6 +521,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/RecordingTranscoding/thirdparty";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -565,6 +546,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/RecordingTranscoding/thirdparty";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
